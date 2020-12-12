@@ -6,6 +6,7 @@ name: Upgrade AKS Cluster
 on:
     schedule: 
       - cron: '0 3 */15 * *'
+    workflow_dispatch:
         
 jobs:
   upgrade-node:
@@ -17,6 +18,8 @@ jobs:
               with:
                 # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
                 creds: ${{secrets.AZURE_CREDENTIALS}}
+            
+            #Upgrade node images of the entire cluster.
             - name: Azure CLI Action
               uses: Azure/cli@1.0.4
               with:
