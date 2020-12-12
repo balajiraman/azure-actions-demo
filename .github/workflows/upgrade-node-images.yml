@@ -1,0 +1,26 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Upgrade AKS Cluster
+
+# Controls when the action will run. 
+on:
+    schedule: 
+      - cron: '0 3 */15 * *'
+        
+jobs:
+  upgrade-node:
+        name: Upgrading Node images
+        runs-on: ubuntu-latest
+        steps:
+            - name: Azure Login
+              uses: Azure/login@v1.1
+              with:
+                # Paste output of `az ad sp create-for-rbac` as value of secret variable: AZURE_CREDENTIALS
+                creds: ${{secrets.AZURE_CREDENTIALS}}
+            - name: Azure CLI Action
+              uses: Azure/cli@1.0.4
+              with:
+                # Specify the script here
+                inlineScript: az aks upgrade -g ${{secrets.RESOURCE_GROUP_NAME}} -n ${{secrets.AKS_CLUSTER_NAME}} --node-image-only
+
+    
